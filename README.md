@@ -192,21 +192,80 @@ Worker 调用 AI 生成正文
 
 ```text
 GEOFlow/
-├── admin/            后台页面、管理入口、诊断页面
-├── api/v1/           机器调用接口
-├── assets/           CSS、JS、图片等静态资源
-├── bin/              调度器、Worker、CLI、迁移与维护脚本
-├── docker/           Docker 构建与启动脚本
-├── docs/             对外文档、部署文档、API / CLI 说明
-├── includes/         配置、数据库封装、AI 引擎、任务/文章服务
-├── article.php       文章详情页入口
-├── index.php         前台首页入口
-├── router.php        本地开发路由入口
-└── docker-compose.yml
+├── index.php                     前台首页入口，负责文章列表与站点聚合展示
+├── article.php                   文章详情页入口，负责正文、SEO 和相关文章渲染
+├── category.php                  分类页入口，按分类聚合文章
+├── archive.php                   归档页入口，用于按时间浏览内容
+├── router.php                    本地开发路由入口，供 `php -S` 使用
+├── docker-compose.yml            开发环境编排，启动 web / postgres / scheduler / worker
+├── docker-compose.prod.yml       生产环境编排模板
+├── start.sh                      本地快速启动脚本
+├── .env.example                  环境变量模板
+│
+├── admin/                        后台管理系统
+│   ├── dashboard.php             后台仪表盘与统计总览
+│   ├── tasks.php                 任务管理页，查看任务状态、重试、执行情况
+│   ├── task-create.php           新建任务页，配置标题库、模型、提示词和发布规则
+│   ├── articles.php              文章列表页，查看草稿、已发布文章与流程状态
+│   ├── articles-review.php       审核中心，处理待审核文章
+│   ├── materials.php             素材管理入口，统一进入标题库、图片库、知识库等
+│   ├── ai-models.php             AI 模型配置页，填写模型地址、ID 和密钥
+│   ├── ai-prompts.php            提示词模板管理页
+│   ├── site-settings.php         站点设置页，管理站点名称、SEO、前台配置
+│   └── includes/                 后台公共模板、导航和页面骨架
+│
+├── api/v1/                       对机器开放的 API 层
+│   └── index.php                 API 单入口，负责路由分发、鉴权和响应输出
+│
+├── assets/                       前端静态资源
+│   ├── css/                      前后台样式文件
+│   ├── js/                       前后台交互脚本
+│   └── images/                   默认图片与静态图标资源
+│
+├── bin/                          CLI 与后台运行脚本
+│   ├── geoflow                   本地 CLI，供 skill 和自动化脚本调用
+│   ├── cron.php                  调度器，负责扫描任务并写入队列
+│   ├── worker.php                常驻 Worker，负责实际调用 AI 生成内容
+│   ├── db_maintenance.php        数据库维护工具
+│   ├── migrate_sqlite_to_pg.php  历史迁移脚本
+│   ├── api/                      API 辅助脚本，例如 token 创建
+│   └── git/                      发布同步与开源检查脚本
+│
+├── docker/                       容器镜像与启动辅助脚本
+│   ├── Dockerfile                Web / Scheduler / Worker 多阶段镜像定义
+│   ├── entrypoint.sh             Web 容器启动入口
+│   ├── scheduler.sh              调度容器启动入口
+│   └── php.ini                   容器内 PHP 配置
+│
+├── docs/                         对外文档中心
+│   ├── deployment/               安装与部署文档
+│   ├── project/                  API、CLI、结构说明等研发文档
+│   ├── 系统说明文档.md           系统整体功能说明
+│   ├── AI_PROJECT_GUIDE.md       AI 相关核心模块说明
+│   └── FAQ.md                    常见问题
+│
+├── includes/                     核心业务逻辑与服务层
+│   ├── config.php                全局配置、常量和基础运行参数
+│   ├── db_support.php            数据库驱动和连接辅助函数
+│   ├── database.php              前台与基础数据访问封装
+│   ├── database_admin.php        后台 schema 初始化和默认数据引导
+│   ├── functions.php             公共函数、Markdown 渲染、后台登录辅助
+│   ├── ai_engine.php             任务执行主引擎，串起标题、正文、插图和落库
+│   ├── ai_service.php            通用 AI 请求封装
+│   ├── job_queue_service.php     队列 claim / complete / fail / retry 逻辑
+│   ├── task_service.php          任务基础服务
+│   ├── task_lifecycle_service.php 任务启动、停止、入队等生命周期动作
+│   ├── article_service.php       文章创建、更新、审核、发布服务
+│   ├── api_auth.php              API Bearer 鉴权
+│   ├── api_token_service.php     API token 生成与校验
+│   └── catalog_service.php       CLI/API 用的基础资源字典输出
+│
+└── data/                         运行时数据目录占位；公开仓库不附带真实数据库和业务数据
 ```
 
 目录约束：
 
+- 前台入口文件放根目录，方便直接部署和路由映射
 - `admin/` 放后台页面和后台动作入口
 - `api/v1/` 放正式对外 API
 - `bin/` 放 CLI、调度和维护脚本
