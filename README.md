@@ -38,6 +38,27 @@ Worker 执行 AI 生成
 
 ---
 
+## 🧱 系统架构
+
+| 层级 | 说明 |
+|------|------|
+| Web / Admin | 前台文章站点与后台管理页面，负责内容浏览、素材管理、任务管理和配置入口 |
+| API / CLI | `/api/v1` 提供机器接口，`bin/geoflow` 提供本地 CLI 能力，适合批量任务和自动化接入 |
+| Scheduler / Worker | 调度器负责扫描任务和入队，Worker 负责实际调用模型生成内容 |
+| Domain Services | `includes/` 中的任务、文章、队列、AI、检索等服务承载核心业务规则 |
+| Persistence | PostgreSQL 作为运行时数据库，保存任务、文章、素材、审核状态和系统配置 |
+
+核心链路：
+
+1. 后台配置模型、提示词和素材库
+2. 创建任务并进入调度
+3. 调度器写入 job queue
+4. Worker 调用 AI 生成正文
+5. 文章进入草稿、审核、发布链路
+6. 前台输出文章与 SEO 页面
+
+---
+
 ## 🚀 快速开始
 
 ### 方式一：Docker（推荐）
@@ -164,6 +185,33 @@ Worker 调用 AI 生成正文
         ↓
 前台展示
 ```
+
+---
+
+## 📁 目录结构
+
+```text
+GEOFlow/
+├── admin/            后台页面、管理入口、诊断页面
+├── api/v1/           机器调用接口
+├── assets/           CSS、JS、图片等静态资源
+├── bin/              调度器、Worker、CLI、迁移与维护脚本
+├── docker/           Docker 构建与启动脚本
+├── docs/             对外文档、部署文档、API / CLI 说明
+├── includes/         配置、数据库封装、AI 引擎、任务/文章服务
+├── article.php       文章详情页入口
+├── index.php         前台首页入口
+├── router.php        本地开发路由入口
+└── docker-compose.yml
+```
+
+目录约束：
+
+- `admin/` 放后台页面和后台动作入口
+- `api/v1/` 放正式对外 API
+- `bin/` 放 CLI、调度和维护脚本
+- `includes/` 放核心业务逻辑和服务层
+- `docs/` 只保留对外真正需要的文档
 
 ---
 
