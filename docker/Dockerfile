@@ -35,7 +35,6 @@ COPY includes /var/www/html/includes
 COPY archive.php /var/www/html/archive.php
 COPY article.php /var/www/html/article.php
 COPY category.php /var/www/html/category.php
-COPY detail.php /var/www/html/detail.php
 COPY index.php /var/www/html/index.php
 COPY llms.txt /var/www/html/llms.txt
 COPY llms-full.txt /var/www/html/llms-full.txt
