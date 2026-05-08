@@ -1,4 +1,8 @@
-@extends('theme.netease-news-20260507.layout')
+@php
+    app()->setLocale('en');
+@endphp
+
+@extends('theme.tdwh-netease-news-en-20260508.layout')
 
 @push('head')
     @php

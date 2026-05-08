@@ -1,4 +1,8 @@
-@extends('theme.netease-news-20260507.layout')
+@php
+    app()->setLocale('en');
+@endphp
+
+@extends('theme.tdwh-netease-news-en-20260508.layout')
 
 @push('head')
     @php
@@ -54,7 +58,7 @@
                 </div>
                 <div class="ne-feed">
                     @forelse($articles as $article)
-                        @include('theme.netease-news-20260507.partials.article-card', ['article' => $article])
+                        @include('theme.tdwh-netease-news-en-20260508.partials.article-card', ['article' => $article])
                     @empty
                         <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-10 text-center text-gray-500">
                             {{ __('site.home_empty_title') }}
@@ -68,6 +72,6 @@
             </div>
         </section>
 
-        @include('theme.netease-news-20260507.partials.sidebar')
+        @include('theme.tdwh-netease-news-en-20260508.partials.sidebar')
     </div>
 @endsection

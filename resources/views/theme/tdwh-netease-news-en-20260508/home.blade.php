@@ -1,4 +1,21 @@
-@extends('theme.netease-news-20260507.layout')
+@php
+    app()->setLocale('en');
+
+    if (($search ?? '') !== '') {
+        $viewTitle = 'Search: '.$search;
+        $pageTitle = $viewTitle.' - '.$siteTitle;
+        $pageDescription = $search.' - '.$siteDescription;
+    } elseif (($categoryMissing ?? false) === true) {
+        $viewTitle = 'Category not found';
+        $pageTitle = $viewTitle.' - '.$siteTitle;
+    } elseif (($category ?? null) !== null) {
+        $viewTitle = $category->name;
+    } else {
+        $viewTitle = 'Latest Articles';
+    }
+@endphp
+
+@extends('theme.tdwh-netease-news-en-20260508.layout')
 
 @push('head')
     @php
@@ -106,7 +123,7 @@
                     </div>
                     <div class="ne-feed">
                         @foreach($featuredArticles->take(5) as $article)
-                            @include('theme.netease-news-20260507.partials.article-card', ['article' => $article, 'showFeaturedBadge' => true])
+                            @include('theme.tdwh-netease-news-en-20260508.partials.article-card', ['article' => $article, 'showFeaturedBadge' => true])
                         @endforeach
                     </div>
                 </section>
@@ -118,7 +135,7 @@
                 </div>
                 <div class="ne-feed">
                     @forelse($articles as $article)
-                        @include('theme.netease-news-20260507.partials.article-card', ['article' => $article])
+                        @include('theme.tdwh-netease-news-en-20260508.partials.article-card', ['article' => $article])
                     @empty
                         <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-10 text-center text-gray-500">
                             {{ __('site.home_empty_title') }}
@@ -132,6 +149,6 @@
             </div>
         </section>
 
-        @include('theme.netease-news-20260507.partials.sidebar', ['showFeedPanel' => $isDefaultHome])
+        @include('theme.tdwh-netease-news-en-20260508.partials.sidebar', ['showFeedPanel' => $isDefaultHome])
     </div>
 @endsection

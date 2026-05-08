@@ -1,5 +1,8 @@
+@php
+    app()->setLocale('en');
+@endphp
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,7 +21,7 @@
     <script src="{{ asset('js/tailwindcss.play-cdn.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('themes/netease-news-20260507/theme.css') }}">
+    <link rel="stylesheet" href="{{ asset('themes/tdwh-netease-news-en-20260508/theme.css') }}">
     <script src="{{ asset('js/lucide.min.js') }}"></script>
     @if(!empty($headAnalyticsCode))
         {!! $headAnalyticsCode !!}
@@ -43,13 +46,13 @@
     </script>
 </head>
 <body class="ne-body">
-    @include('theme.netease-news-20260507.partials.header')
+    @include('theme.tdwh-netease-news-en-20260508.partials.header')
     <main class="ne-main">
         @yield('content')
     </main>
-    @include('theme.netease-news-20260507.partials.footer')
+    @include('theme.tdwh-netease-news-en-20260508.partials.footer')
     @stack('scripts')
     <script src="{{ asset('assets/js/main.js') }}"></script>
-    <script src="{{ asset('themes/netease-news-20260507/theme.js') }}" defer></script>
+    <script src="{{ asset('themes/tdwh-netease-news-en-20260508/theme.js') }}" defer></script>
 </body>
 </html>
